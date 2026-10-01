@@ -257,6 +257,8 @@ final class XisoExtractor {
             } catch (IOException e) {
                 throw new ExtractException("Could not write " + path + " (is the storage full?).");
             }
+            if (file.name.toLowerCase(java.util.Locale.ROOT).endsWith(".map") && !MapData.isValidCacheFile(path))
+                throw new ExtractException("The copied map " + file.name + " is damaged.");
         }
 
         /* (the maps folder may be there, empty: the app makes it for adb) */

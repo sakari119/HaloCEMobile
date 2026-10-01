@@ -40,6 +40,7 @@ public class LauncherActivity extends Activity {
     private TextView status;
     private ProgressBar progress;
     private Button pick;
+    private String dataProblem;
     private final Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
@@ -112,7 +113,8 @@ public class LauncherActivity extends Activity {
     }
 
     private boolean haveData() {
-        return dataRoot != null && new File(dataRoot, "maps/ui.map").isFile();
+        dataProblem = MapData.problem(dataRoot);
+        return dataProblem == null;
     }
 
     private void startGame() {
@@ -140,7 +142,7 @@ public class LauncherActivity extends Activity {
         layout.addView(title);
 
         TextView message = new TextView(this);
-        message.setText("Choose an Xbox disc image of Halo: Combat Evolved (an .iso or .xiso file, any "
+        message.setText(dataProblem + "\n\nChoose an Xbox disc image of Halo: Combat Evolved (an .iso or .xiso file, any "
             + "version) on this device. Its maps folder is copied into the app's storage (about 1.8 GB), "
             + "and you can delete the image afterwards.\n\n"
             + "You can also copy a maps folder from a computer:\n"
@@ -234,7 +236,7 @@ public class LauncherActivity extends Activity {
                 if (haveData()) {
                     startGame();
                 } else {
-                    fail("The extraction finished but maps/ui.map is missing.");
+                    fail(dataProblem + " Choose the disc image again.");
                 }
             });
         } catch (XisoExtractor.ExtractException exception) {
